@@ -1,5 +1,5 @@
-ARG SERVER_IMAGE
-ARG ADMIN_TOOLS_IMAGE
+ARG SERVER_IMAGE=983604318039.dkr.ecr.eu-central-1.amazonaws.com/axiom-temporal:test3
+ARG ADMIN_TOOLS_IMAGE=temporalio/admin-tools:1.18.3
 ARG GOPROXY
 
 ##### Admin Tools #####
