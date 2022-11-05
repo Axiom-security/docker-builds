@@ -18,7 +18,7 @@ RUN (cd ./tctl && go mod download all)
 
 # build
 COPY . .
-RUN (cd ./temporal && make temporal-server)
+RUN (cd ./temporal && make temporal-server-linux)
 RUN (cd ./tctl && make build)
 
 ##### Temporal server #####
