@@ -1,7 +1,7 @@
 set -e
 
 # need both of these projects. uncomment on CI/CD systems
-# git clone git@github.com:temporalio/temporal.git
+# git clone git@github.com:Axiom-security/temporal.git
 # git clone git@github.com:temporalio/tctl.git
 # /etc/temporal
 
