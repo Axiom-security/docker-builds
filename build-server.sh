@@ -14,7 +14,7 @@ cp -r ../tctl .
 mkdir -p temporal/axiom
 cp -r ../axiom/* temporal/axiom
 
-BASE=983604318039.dkr.ecr.eu-central-1.amazonaws.com/temporal-server
+BASE=708482085879.dkr.ecr.eu-central-1.amazonaws.com/temporal-server
 TAG=$1
 ENVIRONMENT=$2
 
@@ -37,4 +37,6 @@ else
   PLATFORM=amd64
 fi
 
+aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 708482085879.dkr.ecr.eu-central-1.amazonaws.com
 docker build -f server.Dockerfile --platform linux/$PLATFORM -t $BASE:$TAG .
+docker push $BASE:$TAG
