@@ -283,6 +283,7 @@ register_default_namespace() {
     echo "Registering default namespace: ${DEFAULT_NAMESPACE}."
     if ! tctl --ns "${DEFAULT_NAMESPACE}" namespace describe; then
         echo "Default namespace ${DEFAULT_NAMESPACE} not found. Creating..."
+        export TEMPORAL_CLI_AUTH=ebad139f-c46d-4171-9f5f-c72132c743a6    ############# this is required when running with auth plugin
         tctl --ns "${DEFAULT_NAMESPACE}" namespace register --rd "${DEFAULT_NAMESPACE_RETENTION}" --desc "Default namespace for Temporal Server."
         echo "Default namespace ${DEFAULT_NAMESPACE} registration complete."
     else

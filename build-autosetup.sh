@@ -4,7 +4,7 @@ TAG=$1
 ENVIRONMENT=$2
 SERVER_IMAGE=$3
 
-BASE=708482085879.dkr.ecr.eu-central-1.amazonaws.com/temporal-auto-setup
+BASE=983604318039.dkr.ecr.eu-central-1.amazonaws.com/temporal-auto-setup
 
 if [ -z $TAG ]
 then
@@ -26,7 +26,6 @@ else
 fi
 
 
-
-aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 708482085879.dkr.ecr.eu-central-1.amazonaws.com
-docker build --platform linux/$PLATFORM -f auto-setup.Dockerfile --build-arg SERVER_IMAGE=$SERVER_IMAGE  -t $BASE:$TAG .
-docker $BASE:$TAG
+aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 983604318039.dkr.ecr.eu-central-1.amazonaws.com
+docker build --platform linux/$PLATFORM -f auto-setup.Dockerfile --build-arg SERVER_IMAGE=$SERVER_IMAGE -t $BASE:$TAG .
+docker push $BASE:$TAG
