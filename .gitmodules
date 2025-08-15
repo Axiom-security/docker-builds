@@ -1,6 +1,6 @@
 [submodule "temporal"]
 	path = temporal
-	url = https://github.com/temporalio/temporal
+	url = https://github.com/Axiom-security/temporal
 	branch = main
 [submodule "tctl"]
 	path = tctl
