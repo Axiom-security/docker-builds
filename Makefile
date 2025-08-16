@@ -57,6 +57,7 @@ update-submodules:
 	@GOOS=linux GOARCH=$* CGO_ENABLED=$(CGO_ENABLED) make -C $(TCTL_ROOT) build
 	@cp ./$(TCTL_ROOT)/tctl build/$*/
 	@cp ./$(TCTL_ROOT)/tctl-authorization-plugin build/$*/
+	@chmod 755 build/$*/*
 
 .PHONY: bins
 .NOTPARALLEL: bins

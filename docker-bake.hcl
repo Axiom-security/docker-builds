@@ -79,6 +79,10 @@ target "auto-setup" {
     TAG_LATEST ? "${IMAGE_REPO}/auto-setup:latest" : ""
   ]
   platforms = platforms
+  args = {
+    TEMPORAL_SHA = "${TEMPORAL_SHA}"
+    TCTL_SHA = "${TCTL_SHA}"
+  }
   contexts = {
     server = "target:server"
     admin-tools = "target:admin-tools"

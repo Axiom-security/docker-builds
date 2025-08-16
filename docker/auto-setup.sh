@@ -81,7 +81,7 @@ validate_db_env() {
               die "MYSQL_SEEDS env must be set if DB is ${DB}."
           fi
           ;;
-      postgres12 | postgres12_pgx)
+      postgres12 | postgres12_pgx | postgresql)
           if [[ -z ${POSTGRES_SEEDS} ]]; then
               die "POSTGRES_SEEDS env must be set if DB is ${DB}."
           fi
@@ -138,7 +138,7 @@ wait_for_db() {
       mysql8)
           wait_for_mysql
           ;;
-      postgres12 | postgres12_pgx)
+      postgres12 | postgres12_pgx | postgresql)
           wait_for_postgres
           ;;
       cassandra)
@@ -202,12 +202,12 @@ setup_postgres_schema() {
     # TODO (alex): Remove exports
     export SQL_PASSWORD=${POSTGRES_PWD}
 
-    POSTGRES_VERSION_DIR=v12
+    POSTGRES_VERSION_DIR=v96
     SCHEMA_DIR=${TEMPORAL_HOME}/schema/postgresql/${POSTGRES_VERSION_DIR}/temporal/versioned
     # Create database only if its name is different from the user name. Otherwise PostgreSQL container itself will create database.
     if [[ ${DBNAME} != "${POSTGRES_USER}" && ${SKIP_DB_CREATE} != true ]]; then
         temporal-sql-tool \
-            --plugin ${DB} \
+            --plugin postgres \
             --ep "${POSTGRES_SEEDS}" \
             -u "${POSTGRES_USER}" \
             -p "${DB_PORT}" \
@@ -221,7 +221,7 @@ setup_postgres_schema() {
             create
     fi
     temporal-sql-tool \
-        --plugin ${DB} \
+        --plugin postgres \
         --ep "${POSTGRES_SEEDS}" \
         -u "${POSTGRES_USER}" \
         -p "${DB_PORT}" \
@@ -234,7 +234,7 @@ setup_postgres_schema() {
         --tls-server-name "${POSTGRES_TLS_SERVER_NAME}" \
         setup-schema -v 0.0
     temporal-sql-tool \
-        --plugin ${DB} \
+        --plugin postgres \
         --ep "${POSTGRES_SEEDS}" \
         -u "${POSTGRES_USER}" \
         -p "${DB_PORT}" \
@@ -252,7 +252,7 @@ setup_postgres_schema() {
       VISIBILITY_SCHEMA_DIR=${TEMPORAL_HOME}/schema/postgresql/${POSTGRES_VERSION_DIR}/visibility/versioned
       if [[ ${VISIBILITY_DBNAME} != "${POSTGRES_USER}" && ${SKIP_DB_CREATE} != true ]]; then
           temporal-sql-tool \
-              --plugin ${DB} \
+              --plugin postgres \
               --ep "${POSTGRES_SEEDS}" \
               -u "${POSTGRES_USER}" \
               -p "${DB_PORT}" \
@@ -266,7 +266,7 @@ setup_postgres_schema() {
               create
       fi
       temporal-sql-tool \
-          --plugin ${DB} \
+          --plugin postgres \
           --ep "${POSTGRES_SEEDS}" \
           -u "${POSTGRES_USER}" \
           -p "${DB_PORT}" \
@@ -279,7 +279,7 @@ setup_postgres_schema() {
           --tls-server-name "${POSTGRES_TLS_SERVER_NAME}" \
           setup-schema -v 0.0
       temporal-sql-tool \
-          --plugin ${DB} \
+          --plugin postgres \
           --ep "${POSTGRES_SEEDS}" \
           -u "${POSTGRES_USER}" \
           -p "${DB_PORT}" \
@@ -300,7 +300,7 @@ setup_schema() {
           echo 'Setup MySQL schema.'
           setup_mysql_schema
           ;;
-      postgres12 | postgres12_pgx)
+      postgres12 | postgres12_pgx | postgresql)
           echo 'Setup PostgreSQL schema.'
           setup_postgres_schema
           ;;

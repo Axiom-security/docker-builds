@@ -57,6 +57,11 @@ WORKDIR /etc/temporal
 COPY ./build/${TARGETARCH}/temporal-cassandra-tool /usr/local/bin
 COPY ./build/${TARGETARCH}/temporal-sql-tool /usr/local/bin
 
+# Fix binary permissions for temporal user (run as root)
+USER root
+RUN chmod 755 /usr/local/bin/temporal-cassandra-tool /usr/local/bin/temporal-sql-tool
+USER temporal
+
 # configs
 COPY  ./temporal/schema /etc/temporal/schema
 # Fix schema file permissions for temporal user
