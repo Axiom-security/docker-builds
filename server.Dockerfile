@@ -15,18 +15,23 @@ RUN addgroup -g 1000 temporal
 RUN adduser -u 1000 -G temporal -D temporal
 RUN mkdir /etc/temporal/config
 RUN chown -R temporal:temporal /etc/temporal/config
-USER temporal
 
 # store component versions in the environment
 ENV TEMPORAL_SHA=${TEMPORAL_SHA}
 ENV TCTL_SHA=${TCTL_SHA}
 
-# binaries
+# binaries (copy as root then fix ownership for temporal user)
 COPY ./build/${TARGETARCH}/dockerize /usr/local/bin/dockerize
 COPY ./build/${TARGETARCH}/tctl /usr/local/bin
 COPY ./build/${TARGETARCH}/tctl-authorization-plugin /usr/local/bin
 COPY ./build/${TARGETARCH}/temporal-server /usr/local/bin
 COPY ./build/${TARGETARCH}/temporal /usr/local/bin
+
+# Fix binary ownership and permissions for temporal user
+RUN chown temporal:temporal /usr/local/bin/dockerize /usr/local/bin/tctl /usr/local/bin/tctl-authorization-plugin /usr/local/bin/temporal-server /usr/local/bin/temporal && \
+    chmod 755 /usr/local/bin/dockerize /usr/local/bin/tctl /usr/local/bin/tctl-authorization-plugin /usr/local/bin/temporal-server /usr/local/bin/temporal
+
+USER temporal
 
 # configs
 COPY ./temporal/config/dynamicconfig/docker.yaml /etc/temporal/config/dynamicconfig/docker.yaml
@@ -54,6 +59,10 @@ COPY ./build/${TARGETARCH}/temporal-sql-tool /usr/local/bin
 
 # configs
 COPY  ./temporal/schema /etc/temporal/schema
+# Fix schema file permissions for temporal user
+USER root
+RUN chown -R temporal:temporal /etc/temporal/schema && chmod -R 755 /etc/temporal/schema
+USER temporal
 
 # scripts
 COPY ./docker/entrypoint.sh /etc/temporal/entrypoint.sh
