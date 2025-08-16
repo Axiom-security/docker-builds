@@ -2,10 +2,10 @@ ARG BASE_ADMIN_TOOLS_IMAGE=temporalio/base-admin-tools:1.12.7
 
 ##### Admin Tools #####
 # This is injected as a context via the bakefile so we don't take it as an ARG
-FROM server AS server-base
+FROM temporaliotest/server as server
 
 ##### Temporal admin tools #####
-FROM ${BASE_ADMIN_TOOLS_IMAGE} AS temporal-admin-tools
+FROM ${BASE_ADMIN_TOOLS_IMAGE} as temporal-admin-tools
 ARG TARGETARCH
 
 COPY  ./build/${TARGETARCH}/tctl /usr/local/bin

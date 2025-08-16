@@ -1,6 +1,6 @@
 ARG BASE_SERVER_IMAGE=temporalio/base-server:1.15.7
 
-FROM ${BASE_SERVER_IMAGE} AS temporal-server
+FROM ${BASE_SERVER_IMAGE} as temporal-server
 ARG TARGETARCH
 ARG TEMPORAL_SHA=unknown
 ARG TCTL_SHA=unknown
@@ -37,14 +37,14 @@ COPY ./docker/entrypoint.sh /etc/temporal/entrypoint.sh
 COPY ./docker/start-temporal.sh /etc/temporal/start-temporal.sh
 
 ### Server release image ###
-FROM temporal-server AS server
+FROM temporal-server as server
 ENTRYPOINT ["/etc/temporal/entrypoint.sh"]
 
 ### Server auto-setup image ###
 ##### Admin Tools #####
 # This is injected as a context via the bakefile so we don't take it as an ARG
-FROM admin-tools AS admin-tools-base
-FROM temporal-server AS auto-setup
+FROM temporaliotest/admin-tools as admin-tools
+FROM temporal-server as auto-setup
 
 WORKDIR /etc/temporal
 
